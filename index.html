@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bồng Bềnh Gallery</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --card: #131c31;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #7dd3fc;
+      --accent-2: #22d3ee;
+      --stroke: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at 20% 20%, rgba(34,211,238,0.08), transparent 25%),
+                  radial-gradient(circle at 80% 0%, rgba(125,211,252,0.08), transparent 25%),
+                  var(--bg);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(15,23,42,0.85);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 0.5px;
+    }
+    .brand .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(125,211,252,0.25), rgba(34,211,238,0.5));
+      border: 1px solid rgba(255,255,255,0.12);
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      font-size: 15px;
+    }
+    .nav-links a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      color: var(--muted);
+    }
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      border-color: var(--stroke);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+    .cta {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0a0f1f;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 10px 30px rgba(34,211,238,0.35);
+    }
+    .cta:hover { transform: translateY(-1px); }
+    .cta:active { transform: translateY(0); }
+
+    .hero {
+      position: relative;
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding: 80px 22px 60px;
+      overflow: hidden;
+    }
+    .hero::before,
+    .hero::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+    }
+    .hero::before {
+      width: 360px;
+      height: 360px;
+      background: #22d3ee;
+      top: -60px;
+      right: -120px;
+    }
+    .hero::after {
+      width: 280px;
+      height: 280px;
+      background: #7dd3fc;
+      bottom: -100px;
+      left: -80px;
+    }
+    .hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 26px;
+      align-items: center;
+    }
+    .hero-copy h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(34px, 5vw, 56px);
+      margin: 0 0 12px;
+    }
+    .hero-copy p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .pill-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+      font-size: 13px;
+    }
+    .card {
+      position: relative;
+      background: linear-gradient(160deg, rgba(17,24,39,0.9), rgba(15,23,42,0.85));
+      border: 1px solid var(--stroke);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .feature-card {
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .feature-image {
+      flex: 1;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(34,211,238,0.12), rgba(125,211,252,0.18));
+      border: 1px solid var(--stroke);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-image::before,
+    .feature-image::after {
+      content: '';
+      position: absolute;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(125,211,252,0.4), rgba(34,211,238,0.05));
+      filter: blur(10px);
+    }
+    .feature-image::before {
+      width: 160px;
+      height: 160px;
+      top: -30px;
+      left: -40px;
+    }
+    .feature-image::after {
+      width: 220px;
+      height: 220px;
+      bottom: -60px;
+      right: -50px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: rgba(125,211,252,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(125,211,252,0.35);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .section {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding: 0 22px 10px;
+    }
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      margin: 0 0 12px;
+      font-size: clamp(26px, 4vw, 38px);
+    }
+    .section > p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      max-width: 740px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .chip {
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--stroke);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .date {
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+    .label {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .tagline {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 6px 0 0;
+    }
+    .footer {
+      max-width: 1200px;
+      margin: 50px auto 40px;
+      padding: 0 22px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .footer small { color: var(--muted); }
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .button-alt {
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--stroke);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .button-alt:hover { background: rgba(255,255,255,0.03); border-color: rgba(125,211,252,0.4); }
+    .glass {
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.03);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    input, label {
+      width: 100%;
+      color: var(--text);
+    }
+    input {
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.04);
+      outline: none;
+    }
+    input:focus {
+      border-color: rgba(125,211,252,0.5);
+      box-shadow: 0 0 0 3px rgba(125,211,252,0.15);
+    }
+    .list {
+      display: grid;
+      gap: 12px;
+      margin: 12px 0 0;
+    }
+    .list strong { display: block; }
+    .bar {
+      height: 3px;
+      width: 60px;
+      background: linear-gradient(120deg, rgba(125,211,252,0.8), rgba(34,211,238,0.7));
+      border-radius: 999px;
+      margin: 10px 0 12px;
+    }
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 14px 16px; }
+      .nav-links { display: none; }
+      .hero { padding: 60px 16px 40px; }
+      .section { padding: 0 16px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">BB</div>
+        <div>
+          <div>Bồng Bềnh Gallery</div>
+          <div class="tagline">Nghệ thuật trôi bồng bềnh</div>
+        </div>
+      </div>
+      <div class="nav-links" aria-label="Primary">
+        <a href="#collections">Bộ sưu tập</a>
+        <a href="#calendar">Lịch trưng bày</a>
+        <a href="#artists">Nghệ sĩ</a>
+        <a href="#visit">Tham quan</a>
+      </div>
+      <button class="cta" onclick="document.getElementById('visit').scrollIntoView({behavior:'smooth'})">Đặt lịch</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <div class="pill">Gallery độc lập tại Sài Gòn</div>
+          <h1>Không gian nghệ thuật trôi bồng bềnh giữa truyền thống và đương đại.</h1>
+          <p>Bồng Bềnh Gallery giới thiệu những tác phẩm kết hợp chất liệu Việt và ngôn ngữ thị giác mới, từ hội họa, sắp đặt đến nghệ thuật số.</p>
+          <div class="pill-row">
+            <span class="pill">Curated shows</span>
+            <span class="pill">New media</span>
+            <span class="pill">Artist talk</span>
+            <span class="pill">Residency</span>
+          </div>
+          <div class="cta-row">
+            <button class="cta" onclick="document.getElementById('collections').scrollIntoView({behavior:'smooth'})">Khám phá ngay</button>
+            <button class="button-alt" onclick="document.getElementById('newsletter').scrollIntoView({behavior:'smooth'})">Nhận tin mới</button>
+          </div>
+        </div>
+        <div class="card feature-card floating">
+          <span class="badge">Triển lãm đang mở</span>
+          <div class="feature-image" aria-hidden="true"></div>
+          <div>
+            <strong>“Mạch Nước Ngầm”</strong>
+            <div class="tagline">Phạm vi: Sắp đặt ánh sáng & chất liệu vải nhuộm chàm</div>
+            <div class="chip-row">
+              <span class="chip">18.04 - 12.05</span>
+              <span class="chip">Artist: Mai Trâm</span>
+              <span class="chip">Phòng chính</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections" class="section">
+      <h2>Bộ sưu tập</h2>
+      <p>Chọn lọc các series đại diện cho tinh thần “bồng bềnh”: giao thoa giữa mơ và thực, vật lý và kỹ thuật số.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="badge">Canvas & mixed media</div>
+          <h3>Đường chân trời mờ</h3>
+          <p class="tagline">Loạt tranh acrylic kết hợp sợi lanh thô, khắc họa đường chân trời Đà Lạt trong sương.</p>
+          <div class="bar"></div>
+          <div class="chip-row">
+            <span class="chip">12 tác phẩm</span>
+            <span class="chip">2019 - 2022</span>
+            <span class="chip">Curated: Linh B.</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Digital light</div>
+          <h3>Neon Reverie</h3>
+          <p class="tagline">Trình diễn ánh sáng tương tác dùng cảm biến nhịp tim, tạo sóng màu “thở” cùng người xem.</p>
+          <div class="bar"></div>
+          <div class="chip-row">
+            <span class="chip">VR-ready</span>
+            <span class="chip">Real-time</span>
+            <span class="chip">Collab: Tn. Studio</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Photography</div>
+          <h3>Giữa hai mùa nước</h3>
+          <p class="tagline">Ảnh phim trung định dạng, ghi lại miền Tây mùa lũ với góc nhìn siêu thực, ánh sáng bạc.</p>
+          <div class="bar"></div>
+          <div class="chip-row">
+            <span class="chip">Gelatin silver</span>
+            <span class="chip">Phòng tối</span>
+            <span class="chip">Edition /15</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">Soundscape</div>
+          <h3>Âm vang lơ lửng</h3>
+          <p class="tagline">Không gian âm thanh đa kênh mô phỏng dòng chảy Mekong, người nghe ngồi trên “bè” gỗ.</p>
+          <div class="bar"></div>
+          <div class="chip-row">
+            <span class="chip">8 kênh</span>
+            <span class="chip">Durational</span>
+            <span class="chip">Artist: Hạo Nhiên</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="calendar" class="section">
+      <h2>Lịch trưng bày</h2>
+      <p>Ba chương trình chính mỗi quý, xen kẽ talk và workshop để kết nối cộng đồng nghệ thuật đương đại.</p>
+      <div class="calendar">
+        <div class="card">
+          <div class="label">May · Main Hall</div>
+          <div class="date">18.04 – 12.05</div>
+          <h3>Mạch Nước Ngầm</h3>
+          <p class="tagline">Sắp đặt ánh sáng và chất liệu vải nhuộm chàm, tương tác với hơi thở người xem.</p>
+        </div>
+        <div class="card">
+          <div class="label">June · Studio</div>
+          <div class="date">07.06 – 23.06</div>
+          <h3>Floating Letters</h3>
+          <p class="tagline">Trình diễn thư pháp hiện đại kết hợp motion graphic và nhạc điện tử downtempo.</p>
+        </div>
+        <div class="card">
+          <div class="label">July · Residency</div>
+          <div class="date">05.07 – 26.07</div>
+          <h3>Residency: Riverbound</h3>
+          <p class="tagline">4 nghệ sĩ trẻ nghiên cứu về nước trong đô thị, kết thúc bằng open studio cuối kỳ.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="artists" class="section">
+      <h2>Nghệ sĩ tiêu biểu</h2>
+      <p>Những cộng tác viên đã cùng Bồng Bềnh thử nghiệm và kể chuyện theo nhiều chất liệu.</p>
+      <div class="grid">
+        <div class="card glass">
+          <strong>Mai Trâm</strong>
+          <div class="tagline">Sắp đặt ánh sáng · Vải nhuộm · Không gian tương tác</div>
+          <div class="list">
+            <div><span class="label">Điểm nhấn</span>“Breathing Threads” - triển lãm cá nhân 2023.</div>
+            <div><span class="label">Thử nghiệm</span>Kết nối cảm biến nhịp tim tạo ánh sáng tự biến đổi.</div>
+          </div>
+        </div>
+        <div class="card glass">
+          <strong>Hạo Nhiên</strong>
+          <div class="tagline">Âm thanh · Field recording · Sân khấu</div>
+          <div class="list">
+            <div><span class="label">Điểm nhấn</span>Soundscape “Mekong Drift” trong Biennale Đà Nẵng.</div>
+            <div><span class="label">Thử nghiệm</span>Âm thanh 8 kênh, loa đặt trên hệ tre gỗ lơ lửng.</div>
+          </div>
+        </div>
+        <div class="card glass">
+          <strong>Linh B.</strong>
+          <div class="tagline">Curator · Nhà nghiên cứu</div>
+          <div class="list">
+            <div><span class="label">Điểm nhấn</span>Curate “Đường chân trời mờ” và chuỗi talk về chất liệu.</div>
+            <div><span class="label">Thử nghiệm</span>Kết hợp tài liệu lưu trữ với AR để kể chuyện về địa tầng.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="visit" class="section">
+      <h2>Tham quan & trải nghiệm</h2>
+      <p>Đặt lịch tham quan có hướng dẫn, hoặc thuê không gian studio cho workshop nhỏ.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="badge">Giờ mở cửa</div>
+          <div class="list">
+            <div><strong>Thứ Ba - Chủ Nhật</strong><span class="tagline">10:00 - 19:00</span></div>
+            <div><strong>Talk & Workshop</strong><span class="tagline">Mỗi thứ Bảy, 15:00 - 17:00</span></div>
+          </div>
+          <div class="bar"></div>
+          <p class="tagline">45/12 Trần Não, Thủ Đức, TP. HCM</p>
+        </div>
+        <div class="card">
+          <div class="badge">Đặt lịch</div>
+          <p class="tagline">Gửi thông tin, chúng tôi xác nhận trong ngày làm việc.</p>
+          <form class="list" id="booking-form">
+            <label>Họ tên<br><input name="name" required placeholder="Tên của bạn"></label>
+            <label>Email<br><input name="email" required type="email" placeholder="email@example.com"></label>
+            <label>Ngày tham quan<br><input name="date" required type="date"></label>
+            <button type="submit" class="cta" style="width: 100%;">Gửi yêu cầu</button>
+            <div id="form-status" class="tagline" role="status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="newsletter" class="section">
+      <div class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;align-items:center;">
+        <div>
+          <div class="badge">Bồng Bềnh Wave</div>
+          <h3>Bản tin hàng tháng</h3>
+          <p class="tagline">Lịch mở cửa, tuyển residency, call for art và những ghi chép hậu trường.</p>
+        </div>
+        <form class="cta-row" id="newsletter-form" style="gap:10px;">
+          <input name="email" type="email" required placeholder="Email của bạn" style="flex:1;min-width:200px;padding:10px 12px;border-radius:12px;border:1px solid var(--stroke);background:rgba(255,255,255,0.04);color:var(--text);">
+          <button type="submit" class="cta">Đăng ký</button>
+          <div id="newsletter-status" class="tagline"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <div class="brand">
+        <div class="logo">BB</div>
+        <div>Bồng Bềnh Gallery</div>
+      </div>
+      <small>Không gian nghệ thuật độc lập. Kết nối nghệ sĩ, nhà nghiên cứu và công chúng yêu nghệ thuật đương đại.</small>
+    </div>
+    <div>
+      <div class="label">Liên hệ</div>
+      <div class="list">
+        <span>hello@bongbenh.gallery</span>
+        <span>+84 93 888 8888</span>
+        <span>@bongbenh.gallery</span>
+      </div>
+    </div>
+    <div>
+      <div class="label">Tài nguyên</div>
+      <div class="list">
+        <span>Hồ sơ press kit</span>
+        <span>Residency 2024</span>
+        <span>Hợp tác tổ chức sự kiện</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const bookingForm = document.getElementById('booking-form');
+    const bookingStatus = document.getElementById('form-status');
+    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterStatus = document.getElementById('newsletter-status');
+
+    const fakeSubmit = (target, statusNode, message) => {
+      statusNode.textContent = 'Đang gửi...';
+      statusNode.style.color = 'var(--muted)';
+      setTimeout(() => {
+        statusNode.textContent = message;
+        statusNode.style.color = 'var(--accent)';
+        target.reset();
+      }, 600);
+    };
+
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      fakeSubmit(bookingForm, bookingStatus, 'Đã nhận thông tin! Chúng tôi sẽ phản hồi sớm.');
+    });
+
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      fakeSubmit(newsletterForm, newsletterStatus, 'Cảm ơn bạn đã theo dõi Bồng Bềnh.');
+    });
+  </script>
+</body>
+</html>
