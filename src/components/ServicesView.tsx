@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ServiceItem } from "../types";
 import { fetchServices } from "../lib/api";
-import { Loader2, Sparkles, Clock, User, Heart, Send, X } from "lucide-react";
+import { Loader2, Sparkles, Clock, User, Heart, Send, X, Compass, Calendar, Bookmark } from "lucide-react";
 
 export default function ServicesView() {
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -10,12 +10,13 @@ export default function ServicesView() {
   const [inquirerName, setInquirerName] = useState("");
   const [inquirerPhone, setInquirerPhone] = useState("");
   const [inquirySent, setInquirySent] = useState(false);
+  const [showNotification, setShowNotification] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadServices() {
       try {
         const data = await fetchServices();
-        setServices(data);
+        setArtsServices(data);
       } catch (err) {
         console.error("Error loading services:", err);
       } finally {
@@ -23,81 +24,117 @@ export default function ServicesView() {
       }
     }
     loadServices();
+
+    // Helper to bypass typescript warning if any
+    function setArtsServices(items: ServiceItem[]) {
+      setServices(items);
+    }
   }, []);
 
   const handleInquirySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inquirerName || !inquirerPhone) return;
     
-    // Simulate inquiry recording
     setInquirySent(true);
     setTimeout(() => {
       setInquirySent(false);
+      const servTitle = inquiredService?.title || "Dịch vụ";
       setInquiredService(null);
       setInquirerName("");
       setInquirerPhone("");
-      alert(`Yêu cầu đăng ký dịch vụ của bạn đã được chuyển đến Họa sĩ Kinh Mai Thuyết. Chúng tôi sẽ gọi lại cho bạn sớm nhất!`);
+      setShowNotification(`Yêu cầu đăng ký khóa học "${servTitle}" đã được gửi tới Ban Biên Tập Bồng Bềnh và họa sĩ Kinh Mai Thuyết. Chúng tôi sẽ liên hệ lại qua SĐT sớm nhất!`);
     }, 1500);
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-8 animate-fadeIn max-w-7xl mx-auto">
       {/* Header */}
-      <div className="border-b-4 border-retro-dark pb-4">
-        <h2 className="font-retro text-4xl text-retro-wood uppercase tracking-wide">
-          Hoạt Động & Trải Nghiệm
+      <div className="border-b border-mat-charcoal/15 pb-6">
+        <span className="font-mono text-xs text-mat-crimson font-bold uppercase tracking-wider block">
+          KHÔNG GIAN TƯƠNG TÁC
+        </span>
+        <h2 className="font-serif text-3xl md:text-4xl text-mat-charcoal font-black tracking-tight mt-1">
+          Hoạt Động & Trải Nghiệm Di Sản
         </h2>
-        <p className="text-xs text-retro-dark/70 font-mono mt-1">
-          Các dịch vụ nghệ thuật và hội thảo tương tác độc đáo được tổ chức ngay trên bến thuyền Bồng Bềnh
+        <p className="text-xs md:text-sm text-mat-charcoal/70 max-w-xl mt-1">
+          Đăng ký tham gia các buổi đàm đạo nghệ thuật, lớp vẽ tranh cổ hoài cổ, và thưởng trà ngắm sóng Kênh Tẻ được tổ chức trên du thuyền Bồng Bềnh.
         </p>
       </div>
 
+      {showNotification && (
+        <div className="bg-mat-jade/10 border border-mat-jade p-5 rounded-2xl flex items-start gap-3 relative animate-fadeIn">
+          <div className="bg-mat-jade text-white p-1.5 rounded-lg shrink-0 mt-0.5">
+            <Sparkles className="w-4 h-4 text-mat-ochre" />
+          </div>
+          <div className="text-xs md:text-sm text-mat-charcoal">
+            <span className="font-bold text-mat-jade block">Đăng Ký Thành Công!</span>
+            {showNotification}
+          </div>
+          <button 
+            onClick={() => setShowNotification(null)}
+            className="absolute right-3 top-3 text-mat-charcoal/50 hover:text-mat-charcoal"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 space-y-4">
-          <Loader2 className="w-10 h-10 animate-spin text-retro-wood" />
-          <p className="font-pixel text-[11px] text-retro-wood">ĐANG SẮP XẾP LỊCH HOẠT ĐỘNG...</p>
+        <div className="flex flex-col items-center justify-center py-24 space-y-4">
+          <Loader2 className="w-10 h-10 animate-spin text-mat-crimson" />
+          <p className="font-mono text-xs text-mat-crimson font-bold animate-pulse">ĐANG THIẾT LẬP LỊCH TRÌNH TRẢI NGHIỆM...</p>
         </div>
       ) : services.length === 0 ? (
-        <div className="pixel-border bg-retro-beige/50 p-12 text-center">
-          <p className="font-pixel text-sm text-retro-wood/60">Chưa có hoạt động nào được lên lịch.</p>
+        <div className="mat-card bg-white p-12 text-center">
+          <p className="font-serif text-lg text-mat-charcoal/60 italic">Hiện tại chưa có sự kiện trải nghiệm mới nào được phát hành.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
             <div
               key={service.id}
-              className="pixel-border bg-retro-paper p-5 flex flex-col justify-between hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+              className="bg-white mat-card p-6 flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-retro-dark/10 pb-2">
-                  <span className="font-pixel text-[9px] bg-retro-wood text-retro-paper px-2 py-0.5 shadow-sm">
-                    {service.available ? "ĐANG MỞ" : "TẠM NGƯNG"}
+              {/* Subtle heritage background watermark */}
+              <div className="absolute right-0 bottom-0 opacity-5 pointer-events-none transform translate-x-8 translate-y-8">
+                <Compass className="w-40 h-40 text-mat-crimson" />
+              </div>
+
+              <div className="space-y-5 relative z-10">
+                <div className="flex items-center justify-between border-b border-mat-charcoal/10 pb-2.5">
+                  <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full ${
+                    service.available 
+                      ? "bg-mat-jade/10 text-mat-jade border border-mat-jade/20" 
+                      : "bg-mat-crimson/10 text-mat-crimson border border-mat-crimson/20"
+                  }`}>
+                    {service.available ? "ĐĂNG KÝ NGAY" : "HẾT SUẤT"}
                   </span>
-                  <div className="flex items-center gap-1 text-[11px] font-mono text-retro-dark/60">
-                    <Clock className="w-3.5 h-3.5 text-retro-rose" />
-                    {service.duration}
+                  
+                  <div className="flex items-center gap-1 text-xs font-mono text-mat-charcoal/60">
+                    <Clock className="w-3.5 h-3.5 text-mat-crimson" />
+                    <span>{service.duration}</span>
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <h3 className="font-retro text-2xl text-retro-wood tracking-wide uppercase leading-tight">
+                <div className="space-y-1.5">
+                  <h3 className="font-serif text-xl font-bold text-mat-charcoal leading-tight">
                     {service.title}
                   </h3>
-                  <div className="flex items-center gap-1.5 text-xs text-retro-dark/70 font-mono">
-                    <User className="w-3.5 h-3.5 text-retro-teal" />
-                    Hướng dẫn: {service.provider}
+                  <div className="flex items-center gap-1.5 text-xs text-mat-charcoal/70 font-mono">
+                    <User className="w-3.5 h-3.5 text-mat-ochre" />
+                    <span>Họa sĩ: {service.provider}</span>
                   </div>
                 </div>
 
-                <p className="text-xs md:text-sm text-retro-dark/90 leading-relaxed min-h-[80px]">
+                <p className="text-xs md:text-sm text-mat-charcoal/80 leading-relaxed font-serif min-h-[72px]">
                   {service.description}
                 </p>
               </div>
 
-              <div className="pt-4 mt-4 border-t border-retro-dark/10 flex items-center justify-between">
+              <div className="pt-4 mt-6 border-t border-mat-charcoal/10 flex items-center justify-between relative z-10">
                 <div className="space-y-0.5">
-                  <span className="block text-[8px] font-pixel text-retro-dark/50">HỌC PHÍ / GIÁ</span>
-                  <span className="font-retro text-2xl text-retro-rose font-medium">
+                  <span className="block text-[9px] font-mono text-mat-charcoal/50 font-bold uppercase">HỌC PHÍ / CHÍ PHÍ</span>
+                  <span className="font-serif text-lg md:text-xl text-mat-crimson font-black tracking-tight">
                     {service.price}
                   </span>
                 </div>
@@ -105,13 +142,13 @@ export default function ServicesView() {
                 <button
                   onClick={() => setInquiredService(service)}
                   disabled={!service.available}
-                  className={`pixel-btn px-3 py-1.5 ${
+                  className={`px-4 py-2 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer border ${
                     service.available 
-                      ? "pixel-btn-amber" 
-                      : "bg-retro-beige/40 text-retro-dark/30 cursor-not-allowed border-retro-dark/30 shadow-none hover:translate-none"
+                      ? "bg-mat-crimson hover:bg-mat-crimson/95 text-white border-mat-crimson shadow" 
+                      : "bg-black/5 text-mat-charcoal/30 border-transparent cursor-not-allowed"
                   }`}
                 >
-                  {service.available ? "ĐĂNG KÝ" : "HẾT CHỖ"}
+                  {service.available ? "ĐĂNG KÝ" : "HẾT GHẾ"}
                 </button>
               </div>
             </div>
@@ -121,88 +158,89 @@ export default function ServicesView() {
 
       {/* Booking Form Modal */}
       {inquiredService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-retro-dark/75 backdrop-blur-xs">
-          <div className="relative w-full max-w-md pixel-border-retro bg-retro-paper animate-zoomIn">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-mat-charcoal/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-md bg-[#F4EFE6] border-4 border-mat-crimson rounded-3xl overflow-hidden shadow-2xl animate-zoomIn">
+            
             {/* Modal Header */}
-            <div className="bg-retro-wood text-retro-paper p-4 flex items-center justify-between border-b-4 border-retro-dark">
+            <div className="bg-mat-crimson text-white p-5 flex items-center justify-between border-b-2 border-mat-ochre">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-retro-amber animate-pulse" />
-                <span className="font-pixel text-[10px] text-retro-amber">
-                  ĐĂNG KÝ TRẢI NGHIỆM
+                <Sparkles className="w-4 h-4 text-mat-ochre animate-pulse" />
+                <span className="font-mono text-xs text-mat-ochre font-bold uppercase tracking-wider">
+                  GIAO ƯỚC THAM GIA TRẢI NGHIỆM
                 </span>
               </div>
               <button
                 onClick={() => setInquiredService(null)}
-                className="text-retro-paper hover:text-retro-amber transition-colors cursor-pointer"
+                className="text-white hover:text-mat-ochre transition-all cursor-pointer p-1 rounded-full hover:bg-white/10"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleInquirySubmit} className="p-6 space-y-4">
-              <div className="bg-retro-beige/60 p-3 border border-retro-dark/15 rounded-sm">
-                <p className="text-[10px] font-pixel text-retro-wood">DỊCH VỤ LỰA CHỌN</p>
-                <p className="font-retro text-2xl text-retro-wood uppercase mt-0.5">{inquiredService.title}</p>
-                <div className="flex justify-between items-center text-xs text-retro-dark/80 font-mono mt-1">
-                  <span>Giá: {inquiredService.price}</span>
+            <form onSubmit={handleInquirySubmit} className="p-6 space-y-5">
+              <div className="bg-white p-4 border border-mat-charcoal/10 rounded-2xl shadow-sm">
+                <p className="text-[9px] font-mono text-mat-charcoal/40 font-bold uppercase">BẠN ĐANG ĐĂNG KÝ</p>
+                <p className="font-serif text-xl font-bold text-mat-crimson leading-tight mt-1">{inquiredService.title}</p>
+                <div className="flex justify-between items-center text-xs font-mono text-mat-charcoal/60 mt-2 border-t border-mat-charcoal/5 pt-2">
+                  <span>Học phí: {inquiredService.price}</span>
                   <span>Thời lượng: {inquiredService.duration}</span>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">
-                    Tên của bạn <span className="text-retro-rose">*</span>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/80">
+                    Tên của quý khách <span className="text-mat-crimson">*</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={inquirerName}
                     onChange={(e) => setInquirerName(e.target.value)}
-                    placeholder="Nhập tên đầy đủ..."
-                    className="w-full bg-retro-beige/30 border-2 border-retro-dark p-2 text-sm font-sans focus:outline-none focus:bg-retro-beige/65"
+                    placeholder="Nhập họ và tên..."
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">
-                    Số điện thoại <span className="text-retro-rose">*</span>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/80">
+                    Số điện thoại liên hệ <span className="text-mat-crimson">*</span>
                   </label>
                   <input
                     type="tel"
                     required
                     value={inquirerPhone}
                     onChange={(e) => setInquirerPhone(e.target.value)}
-                    placeholder="Nhập số điện thoại liên lạc..."
-                    className="w-full bg-retro-beige/30 border-2 border-retro-dark p-2 text-sm font-sans focus:outline-none focus:bg-retro-beige/65"
+                    placeholder="Nhập số điện thoại di động..."
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
               </div>
 
-              <div className="text-[10px] text-retro-dark/60 leading-relaxed bg-retro-beige/30 p-2 rounded-xs">
-                * Dữ liệu đăng ký được chuyển tiếp trực tiếp đến họa sĩ quản lý bến thuyền qua hệ thống backend để sắp xếp lịch hẹn. Quý khách vui lòng để điện thoại mở sau khi đăng ký.
+              <div className="text-[10px] text-mat-charcoal/60 leading-relaxed bg-white/60 p-3 rounded-xl border border-mat-charcoal/5 font-mono">
+                💡 Sau khi gởi yêu cầu, thông tin sẽ được truyền trực tiếp đến bộ phận tổ chức của bến thuyền. Quý khách vui lòng lưu số Hotline <strong className="text-mat-crimson">0989 222 890</strong> để nhận cuộc gọi xác nhận lịch rước mạn thuyền gỗ.
               </div>
 
               <div className="pt-2 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setInquiredService(null)}
-                  className="pixel-btn bg-retro-beige hover:bg-retro-beige/80 px-3 py-1.5"
+                  className="px-4 py-2 bg-white hover:bg-black/5 text-mat-charcoal border border-mat-charcoal/15 text-xs font-mono font-bold rounded-xl transition-all cursor-pointer"
                 >
-                  HỦY
+                  BỎ QUA
                 </button>
                 <button
                   type="submit"
                   disabled={inquirySent}
-                  className="pixel-btn pixel-btn-amber px-4 py-1.5 flex items-center gap-1.5"
+                  className="px-5 py-2 bg-mat-crimson hover:bg-mat-crimson/95 text-white font-mono text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-md border border-mat-ochre/20 cursor-pointer"
                 >
                   {inquirySent ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> ĐANG GỬI...
+                      <Loader2 className="w-4 h-4 animate-spin text-mat-ochre" /> ĐANG ĐĂNG KÝ...
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" /> GỬI YÊU CẦU
+                      <Send className="w-4 h-4 text-mat-ochre" /> GỬI PHIẾU ĐĂNG KÝ
                     </>
                   )}
                 </button>

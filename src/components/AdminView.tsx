@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ArtItem, ServiceItem } from "../types";
 import { fetchArts, addArt, deleteArt, fetchServices, addService, deleteService } from "../lib/api";
-import { Loader2, Plus, Trash2, Key, Check, ShieldAlert, Sparkles, LayoutGrid, Cog } from "lucide-react";
+import { Loader2, Plus, Trash2, Key, Check, ShieldAlert, Sparkles, LayoutGrid, Cog, Lock, LogOut } from "lucide-react";
 
 export default function AdminView() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -56,12 +56,11 @@ export default function AdminView() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Validate passcode: Accept phone number 0989222890 or 1234
     if (passcode === "0989222890" || passcode === "1234") {
       setIsAuthenticated(true);
       setErrorMsg("");
     } else {
-      setErrorMsg("MÃ KHÔNG ĐÚNG! VUI LÒNG THỬ LẠI.");
+      setErrorMsg("MÃ KHÔNG ĐÚNG! VUI LÒNG THỬ LẠI CHÍNH XÁC.");
       setPasscode("");
     }
   };
@@ -88,13 +87,11 @@ export default function AdminView() {
     setSubmittingArt(false);
     if (newArt) {
       alert("Đã thêm tác phẩm mới thành công!");
-      // Reset form
       setArtTitle("");
       setArtPrice("");
       setArtImageUrl("");
       setArtDescription("");
       setArtAvailable(true);
-      // Reload arts list
       loadData();
     } else {
       alert("Có lỗi xảy ra, không thể lưu tác phẩm.");
@@ -121,13 +118,11 @@ export default function AdminView() {
     setSubmittingSvc(false);
     if (newSvc) {
       alert("Đã thêm hoạt động/trải nghiệm mới thành công!");
-      // Reset form
       setSvcTitle("");
       setSvcPrice("");
       setSvcDuration("30 phút");
       setSvcDescription("");
       setSvcAvailable(true);
-      // Reload services list
       loadData();
     } else {
       alert("Có lỗi xảy ra, không thể lưu hoạt động.");
@@ -158,53 +153,54 @@ export default function AdminView() {
     }
   };
 
-  // Auth Gate
+  // Auth Gate Screen
   if (!isAuthenticated) {
     return (
-      <div className="flex justify-center items-center py-12 animate-fadeIn">
-        <div className="w-full max-w-md pixel-border bg-retro-beige p-6 md:p-8 space-y-6 shadow-md text-center">
-          <div className="inline-flex items-center justify-center bg-retro-wood text-retro-paper p-3 rounded-full border-4 border-retro-dark">
-            <Key className="w-8 h-8 animate-pulse text-retro-amber" />
+      <div className="flex justify-center items-center py-12 animate-fadeIn max-w-lg mx-auto">
+        <div className="w-full bg-[#F4EFE6] border-4 border-mat-crimson rounded-3xl p-6 md:p-8 space-y-6 shadow-xl text-center">
+          <div className="inline-flex items-center justify-center bg-mat-crimson text-white p-4 rounded-full border-2 border-mat-ochre">
+            <Lock className="w-6 h-6 text-mat-ochre animate-pulse" />
           </div>
           
-          <div className="space-y-2">
-            <h2 className="font-retro text-4xl text-retro-wood uppercase tracking-wide">
-              Phòng Quản Trị
+          <div className="space-y-1.5">
+            <span className="font-mono text-xs text-mat-crimson font-bold uppercase tracking-wider block">QUYỀN CHỦ KHÁNH</span>
+            <h2 className="font-serif text-3xl text-mat-charcoal font-black tracking-tight">
+              Phòng Quản Trị Triển Lãm
             </h2>
-            <p className="text-xs font-mono text-retro-dark/70">
-              Vui lòng nhập mã bảo mật của Bồng Bềnh Gallery để tiếp tục chỉnh sửa hệ thống.
+            <p className="text-xs font-mono text-mat-charcoal/70 max-w-sm mx-auto leading-relaxed">
+              Vui lòng cung cấp mã bảo mật của Bồng Bềnh Gallery để hiệu chỉnh hoặc cập nhật danh sách tác phẩm.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1 text-left">
-              <label className="block text-xs font-pixel text-retro-dark/80">MÃ BẢO MẬT (PASSCODE):</label>
+              <label className="block text-xs font-mono font-bold text-mat-charcoal/70">MÃ SỐ BẢO MẬT (PASSCODE):</label>
               <input
                 type="password"
                 required
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
-                placeholder="••••••••••"
-                className="w-full bg-retro-paper border-2 border-retro-dark p-3 text-center text-lg font-mono focus:outline-none focus:ring-0"
+                placeholder="••••••••"
+                className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-center text-lg font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
               />
             </div>
 
             {errorMsg && (
-              <div className="bg-retro-rose/25 border-2 border-retro-rose text-retro-rose text-xs font-pixel p-2 rounded-sm flex items-center justify-center gap-1.5">
+              <div className="bg-mat-crimson/10 border border-mat-crimson text-mat-crimson text-xs font-mono py-2.5 px-3 rounded-xl flex items-center justify-center gap-1.5">
                 <ShieldAlert className="w-4 h-4 shrink-0" />
-                {errorMsg}
+                <span>{errorMsg}</span>
               </div>
             )}
 
-            <button type="submit" className="pixel-btn pixel-btn-amber w-full">
-              XÁC THỰC MÃ
+            <button type="submit" className="w-full py-3 bg-mat-crimson hover:bg-mat-crimson/95 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer border border-mat-ochre/20">
+              XÁC THỰC QUYỀN TRUY CẬP
             </button>
           </form>
 
-          <div className="bg-retro-paper/50 border border-retro-dark/10 p-3 text-left space-y-1 rounded-sm">
-            <span className="font-pixel text-[9px] text-retro-wood font-bold uppercase block">Gợi ý trải nghiệm nhanh:</span>
-            <span className="text-[11px] font-mono text-retro-dark/80 leading-relaxed block">
-              Sử dụng mã liên lạc chính thức của họa sĩ: <strong className="text-retro-rose">0989222890</strong> hoặc mã thử nghiệm <strong className="text-retro-rose">1234</strong> để đăng nhập.
+          <div className="bg-white/60 border border-mat-charcoal/5 p-4 text-left space-y-1.5 rounded-2xl font-mono text-[11px] text-mat-charcoal/80 leading-relaxed">
+            <span className="font-bold text-mat-crimson uppercase block">💡 Khảo cứu nhanh cho lập trình viên:</span>
+            <span>
+              Quý danh mật khẩu chính thức của họa sĩ Kinh Mai Thuyết là SĐT: <strong className="text-mat-crimson font-bold">0989222890</strong> hoặc mã kiểm thử nhanh: <strong className="text-mat-crimson font-bold">1234</strong>.
             </span>
           </div>
         </div>
@@ -213,175 +209,183 @@ export default function AdminView() {
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-8 animate-fadeIn max-w-7xl mx-auto">
       {/* Header and Sub tabs */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-4 border-retro-dark pb-4">
-        <div>
-          <h2 className="font-retro text-4xl text-retro-wood uppercase tracking-wide flex items-center gap-2">
-            <Cog className="w-7 h-7 text-retro-wood animate-spin-slow" /> BAN QUẢN TRỊ BỒNG BỀNH
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-mat-charcoal/15 pb-6">
+        <div className="space-y-1">
+          <span className="font-mono text-xs text-mat-crimson font-bold uppercase tracking-wider block">CHỈ HUY SỐ HÓA</span>
+          <h2 className="font-serif text-3xl md:text-4xl text-mat-charcoal font-black tracking-tight mt-1 flex items-center gap-2">
+            <Cog className="w-7 h-7 text-mat-crimson animate-spin-slow shrink-0" /> Thư phòng Biên Tập
           </h2>
-          <p className="text-xs text-retro-dark/70 font-mono mt-1">
-            Hệ thống quản lý thời gian thực lưu trữ trên cơ sở dữ liệu Express CJS.
+          <p className="text-xs md:text-sm text-mat-charcoal/70">
+            Công cụ thêm sửa xóa các tác phẩm hội họa và lịch hoạt động trên chiếc thuyền gỗ "The Coffee Ship" neo tại Kênh Tẻ.
           </p>
         </div>
 
-        {/* Dashboard Log out */}
+        {/* Log out */}
         <button
           onClick={() => setIsAuthenticated(false)}
-          className="pixel-btn text-[9px] bg-retro-rose text-retro-paper border-retro-dark px-3 py-1.5 hover:bg-red-700"
+          className="px-4 py-2 bg-mat-crimson/10 hover:bg-mat-crimson/15 text-mat-crimson border border-mat-crimson/25 font-mono text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
         >
-          ĐĂNG XUẤT 🔓
+          <LogOut className="w-3.5 h-3.5" /> ĐĂNG XUẤT HỆ THỐNG
         </button>
       </div>
 
       {/* Navigation Subtabs */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2.5">
         <button
           onClick={() => setActiveSubTab("arts")}
-          className={`pixel-btn px-4 py-2 flex items-center gap-1.5 ${
-            activeSubTab === "arts" ? "pixel-btn-amber" : "bg-retro-beige text-retro-dark"
+          className={`px-4 py-2.5 text-xs font-mono font-bold rounded-full border transition-all cursor-pointer ${
+            activeSubTab === "arts" 
+              ? "bg-mat-crimson text-white border-mat-crimson shadow-md" 
+              : "bg-white text-mat-charcoal border-mat-charcoal/15 hover:bg-mat-crimson/5"
           }`}
         >
-          + THÊM TÁC PHẨM
+          ✍️ ĐĂNG KÝ HỌA PHẨM MỚI
         </button>
         <button
           onClick={() => setActiveSubTab("services")}
-          className={`pixel-btn px-4 py-2 flex items-center gap-1.5 ${
-            activeSubTab === "services" ? "pixel-btn-amber" : "bg-retro-beige text-retro-dark"
+          className={`px-4 py-2.5 text-xs font-mono font-bold rounded-full border transition-all cursor-pointer ${
+            activeSubTab === "services" 
+              ? "bg-mat-crimson text-white border-mat-crimson shadow-md" 
+              : "bg-white text-mat-charcoal border-mat-charcoal/15 hover:bg-mat-crimson/5"
           }`}
         >
-          + THÊM HOẠT ĐỘNG
+          📆 LÊN LỊCH TRẢI NGHIỆM MỚI
         </button>
         <button
           onClick={() => setActiveSubTab("manage")}
-          className={`pixel-btn px-4 py-2 flex items-center gap-1.5 ${
-            activeSubTab === "manage" ? "pixel-btn-teal" : "bg-retro-beige text-retro-dark"
+          className={`px-4 py-2.5 text-xs font-mono font-bold rounded-full border transition-all cursor-pointer ${
+            activeSubTab === "manage" 
+              ? "bg-mat-jade text-white border-mat-jade shadow-md" 
+              : "bg-white text-mat-charcoal border-mat-charcoal/15 hover:bg-mat-jade/5"
           }`}
         >
-          ⚙️ QUẢN LÝ DANH SÁCH ({arts.length + services.length})
+          📂 QUẢN LÝ KHO LƯU TRỮ ({arts.length + services.length})
         </button>
       </div>
 
       {/* Add Art Form */}
       {activeSubTab === "arts" && (
-        <div className="pixel-border bg-retro-paper p-6 space-y-6">
-          <div className="border-b border-retro-dark/15 pb-2">
-            <h3 className="font-pixel text-xs text-retro-wood uppercase flex items-center gap-1">
-              <Sparkles className="w-4 h-4 text-retro-rose animate-pulse" /> ĐĂNG KÝ TÁC PHẨM MỚI VÀO PHÒNG LÃM
+        <div className="bg-white mat-card p-6 md:p-8 space-y-6">
+          <div className="border-b border-mat-charcoal/10 pb-3 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-mat-crimson animate-pulse" />
+            <h3 className="font-serif text-lg font-bold text-mat-charcoal">
+              Đăng Ký Tác Phẩm Vào Phòng Lãm Số
             </h3>
           </div>
 
           <form onSubmit={handleAddArt} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">TÊN TÁC PHẨM <span className="text-retro-rose">*</span></label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">TÊN HỌA PHẨM <span className="text-mat-crimson">*</span></label>
                 <input
                   type="text"
                   required
                   value={artTitle}
                   onChange={(e) => setArtTitle(e.target.value)}
-                  placeholder="Ví dụ: Thuyền Trăng Kênh Tẻ..."
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                  placeholder="Ví dụ: Nàng Kiều bên bến Kênh Tẻ..."
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">HỌA SĨ SÁNG TÁC</label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">DANH TÁNH HỌA SĨ</label>
                   <input
                     type="text"
                     required
                     value={artArtist}
                     onChange={(e) => setArtArtist(e.target.value)}
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">NĂM SÁNG TÁC</label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">NĂM SÁNG TÁC</label>
                   <input
                     type="text"
                     required
                     value={artYear}
                     onChange={(e) => setArtYear(e.target.value)}
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">CHẤT LIỆU</label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">CHẤT LIỆU DI SẢN</label>
                   <input
                     type="text"
                     required
                     value={artMedium}
                     onChange={(e) => setArtMedium(e.target.value)}
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">GIÁ TRANH (VND / LIÊN HỆ)</label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">GIÁ GIAO LƯU (VND / LIÊN HỆ)</label>
                   <input
                     type="text"
                     value={artPrice}
                     onChange={(e) => setArtPrice(e.target.value)}
-                    placeholder="Ví dụ: 12,000,000 VND"
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    placeholder="Ví dụ: 15,000,000 VND"
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">HÌNH ẢNH URL <span className="text-retro-rose">*</span></label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">LIÊN KẾT HÌNH ẢNH URL <span className="text-mat-crimson">*</span></label>
                 <input
                   type="url"
                   required
                   value={artImageUrl}
                   onChange={(e) => setArtImageUrl(e.target.value)}
-                  placeholder="Nhập đường dẫn ảnh từ CDN hoặc Unsplash..."
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-xs focus:outline-none font-mono"
+                  placeholder="https://images.unsplash.com/photo-..."
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                 />
-                <span className="block text-[10px] text-retro-dark/60 italic">Gợi ý: Dán link ảnh Unsplash hoặc dán link ảnh có sẵn trong thư mục.</span>
+                <span className="block text-[10px] text-mat-charcoal/50 italic leading-relaxed">Mẹo: Quý vị có thể sao chép liên kết ảnh từ Unsplash hoặc dán bất cứ tệp tin ảnh trực tuyến nào.</span>
               </div>
             </div>
 
             <div className="space-y-4 flex flex-col justify-between">
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">MÔ TẢ CHI TIẾT & Ý NGHĨA TÁC PHẨM</label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">PHÁP CHỦ & Ý NGHĨA SÁNG TÁC</label>
                 <textarea
                   rows={6}
                   value={artDescription}
                   onChange={(e) => setArtDescription(e.target.value)}
-                  placeholder="Nhập nguồn cảm hứng, chất nghệ thuật và ý nghĩa câu chuyện đằng sau bức vẽ..."
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none resize-none"
+                  placeholder="Mô tả câu chuyện và nội dung tư tưởng của họa phẩm sơn dầu hoặc sơn mài..."
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20 resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-3 bg-retro-beige p-3 border border-retro-dark/15 rounded-sm">
+              <div className="flex items-center gap-3 bg-[#F4EFE6] p-4 rounded-xl border border-mat-charcoal/5">
                 <input
                   type="checkbox"
                   id="artAvailable"
                   checked={artAvailable}
                   onChange={(e) => setArtAvailable(e.target.checked)}
-                  className="w-4 h-4 text-retro-wood border-retro-dark cursor-pointer"
+                  className="w-4 h-4 rounded-md border-mat-charcoal/30 text-mat-crimson focus:ring-mat-crimson/25 cursor-pointer"
                 />
-                <label htmlFor="artAvailable" className="text-xs font-pixel text-retro-wood cursor-pointer select-none">
-                  Tác phẩm có sẵn để giao lưu / bán? (Mặc định: Sẵn sàng)
+                <label htmlFor="artAvailable" className="text-xs font-mono font-bold text-mat-charcoal/80 cursor-pointer select-none">
+                  Tranh sẵn sàng giao lưu trực tiếp tại bến du thuyền?
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={submittingArt}
-                className="pixel-btn pixel-btn-amber w-full h-12 text-sm flex items-center justify-center gap-2"
+                className="w-full py-4 bg-mat-crimson hover:bg-mat-crimson/95 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer border border-mat-ochre/20 flex items-center justify-center gap-2"
               >
                 {submittingArt ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" /> ĐANG LƯU TÁC PHẨM...
+                    <Loader2 className="w-4 h-4 animate-spin text-mat-ochre" /> ĐANG BIÊN CHÉP TRANH VÀO KHO...
                   </>
                 ) : (
                   <>
-                    <Plus className="w-5 h-5" /> ĐĂNG KÝ PHÒNG LÃM
+                    <Plus className="w-4 h-4 text-mat-ochre" /> TREO TRANH LÊN PHÒNG TRIỂN LÃM
                   </>
                 )}
               </button>
@@ -392,101 +396,101 @@ export default function AdminView() {
 
       {/* Add Service Form */}
       {activeSubTab === "services" && (
-        <div className="pixel-border bg-retro-paper p-6 space-y-6">
-          <div className="border-b border-retro-dark/15 pb-2">
-            <h3 className="font-pixel text-xs text-retro-wood uppercase flex items-center gap-1">
-              <Sparkles className="w-4 h-4 text-retro-rose animate-pulse" /> ĐĂNG KÝ HOẠT ĐỘNG MỚI TRÊN THUYỀN
+        <div className="bg-white mat-card p-6 md:p-8 space-y-6">
+          <div className="border-b border-mat-charcoal/10 pb-3 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-mat-crimson animate-pulse" />
+            <h3 className="font-serif text-lg font-bold text-mat-charcoal">
+              Đăng Ký Hoạt Động & Sự Kiện Mới
             </h3>
           </div>
 
           <form onSubmit={handleAddService} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">TÊN HOẠT ĐỘNG / TRẢI NGHIỆM <span className="text-retro-rose">*</span></label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">TIÊU ĐỀ TRẢI NGHIỆM <span className="text-mat-crimson">*</span></label>
                 <input
                   type="text"
                   required
                   value={svcTitle}
                   onChange={(e) => setSvcTitle(e.target.value)}
-                  placeholder="Ví dụ: Đêm Nhạc Trịnh Công Sơn Mạn Thuyền..."
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                  placeholder="Ví dụ: Đàm Đạo Triết Lý Thúy Kiều..."
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">MỨC PHÍ (VND / MIỄN PHÍ) <span className="text-retro-rose">*</span></label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">CHI PHÍ THAM DỰ <span className="text-mat-crimson">*</span></label>
                   <input
                     type="text"
                     required
                     value={svcPrice}
                     onChange={(e) => setSvcPrice(e.target.value)}
-                    placeholder="Ví dụ: 200,000 VND"
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    placeholder="Ví dụ: Miễn phí trà mộc / 250,000 VND..."
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="block text-xs font-pixel text-retro-dark/80">THỜI LƯỢNG</label>
+                  <label className="block text-xs font-mono font-bold text-mat-charcoal/70">THỜI LƯỢNG ƯỚC CHỪNG</label>
                   <input
                     type="text"
                     required
                     value={svcDuration}
                     onChange={(e) => setSvcDuration(e.target.value)}
-                    placeholder="Ví dụ: 1 tiếng / 45 phút..."
-                    className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                    className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">NGƯỜI CHỦ TRÌ / HƯỚNG DẪN</label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">HỌA SĨ CHỦ TOẠ / HƯỚNG DẪN</label>
                 <input
                   type="text"
                   required
                   value={svcProvider}
                   onChange={(e) => setSvcProvider(e.target.value)}
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none"
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20"
                 />
               </div>
             </div>
 
             <div className="space-y-4 flex flex-col justify-between">
               <div className="space-y-1">
-                <label className="block text-xs font-pixel text-retro-dark/80">MÔ TẢ CHI TIẾT HOẠT ĐỘNG</label>
+                <label className="block text-xs font-mono font-bold text-mat-charcoal/70">MÔ TẢ NỘI DUNG SỰ KIỆN</label>
                 <textarea
                   rows={5}
                   value={svcDescription}
                   onChange={(e) => setSvcDescription(e.target.value)}
-                  placeholder="Nhập nội dung chi tiết của hoạt động trải nghiệm, những bất ngờ thú vị và quà tặng đính kèm..."
-                  className="w-full bg-retro-beige/35 border-2 border-retro-dark p-2 text-sm focus:outline-none resize-none"
+                  placeholder="Ghi rõ thông tin chi tiết sự kiện trải nghiệm vẽ tranh cổ động, thắt nút lụa Áo dài hoặc hòa âm đàn nguyệt..."
+                  className="w-full bg-white border border-mat-charcoal/15 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-mat-crimson/20 resize-none"
                 />
               </div>
 
-              <div className="flex items-center gap-3 bg-retro-beige p-3 border border-retro-dark/15 rounded-sm">
+              <div className="flex items-center gap-3 bg-[#F4EFE6] p-4 rounded-xl border border-mat-charcoal/5">
                 <input
                   type="checkbox"
                   id="svcAvailable"
                   checked={svcAvailable}
                   onChange={(e) => setSvcAvailable(e.target.checked)}
-                  className="w-4 h-4 text-retro-wood border-retro-dark cursor-pointer"
+                  className="w-4 h-4 rounded-md border-mat-charcoal/30 text-mat-crimson focus:ring-mat-crimson/25 cursor-pointer"
                 />
-                <label htmlFor="svcAvailable" className="text-xs font-pixel text-retro-wood cursor-pointer select-none">
-                  Dịch vụ đã sẵn sàng phục vụ? (Mặc định: Có sẵn)
+                <label htmlFor="svcAvailable" className="text-xs font-mono font-bold text-mat-charcoal/80 cursor-pointer select-none">
+                  Kích hoạt lịch trải nghiệm ngay lập tức?
                 </label>
               </div>
 
               <button
                 type="submit"
                 disabled={submittingSvc}
-                className="pixel-btn pixel-btn-amber w-full h-12 text-sm flex items-center justify-center gap-2"
+                className="w-full py-4 bg-mat-crimson hover:bg-mat-crimson/95 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-md cursor-pointer border border-mat-ochre/20 flex items-center justify-center gap-2"
               >
                 {submittingSvc ? (
                   <>
-                    <Loader2 className="w-5 h-5 animate-spin" /> ĐANG ĐĂNG KÝ...
+                    <Loader2 className="w-4 h-4 animate-spin text-mat-ochre" /> ĐANG LƯU SỰ KIỆN SỔ SÁCH...
                   </>
                 ) : (
                   <>
-                    <Plus className="w-5 h-5" /> HOÀN TẤT ĐĂNG KÝ DỊCH VỤ
+                    <Plus className="w-4 h-4 text-mat-ochre" /> PHÁT HÀNH SỰ KIỆN LÊN TRANG CHỦ
                   </>
                 )}
               </button>
@@ -499,40 +503,40 @@ export default function AdminView() {
       {activeSubTab === "manage" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Arts List */}
-          <div className="pixel-border bg-retro-paper p-5 space-y-4">
-            <h3 className="font-retro text-2xl text-retro-wood uppercase border-b-2 border-retro-dark pb-2">
-              Danh Sách Tranh ({arts.length})
+          <div className="bg-white mat-card p-6 space-y-4">
+            <h3 className="font-serif text-xl font-bold text-mat-charcoal border-b border-mat-charcoal/10 pb-2 flex items-center justify-between">
+              <span>Danh Sách Tranh Lưu Kho ({arts.length})</span>
             </h3>
 
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-retro-wood" />
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-mat-crimson" />
               </div>
             ) : arts.length === 0 ? (
-              <p className="text-xs font-pixel text-retro-wood/50 py-4 text-center">Chưa có tác phẩm nào.</p>
+              <p className="text-xs font-mono text-mat-charcoal/50 py-8 text-center">Chưa có tác phẩm nào.</p>
             ) : (
-              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+              <div className="space-y-3 max-h-[440px] overflow-y-auto pr-2">
                 {arts.map((art) => (
                   <div
                     key={art.id}
-                    className="flex gap-3 items-center justify-between bg-retro-beige/40 p-2 border border-retro-dark/10 hover:bg-retro-beige/70 transition-colors rounded-xs"
+                    className="flex gap-3 items-center justify-between bg-[#F4EFE6]/40 p-3 border border-mat-charcoal/10 hover:bg-[#F4EFE6]/90 transition-all rounded-2xl"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 overflow-hidden">
                       <img
                         src={art.imageUrl}
                         alt={art.title}
-                        className="w-12 h-12 object-cover border border-retro-dark"
+                        className="w-12 h-12 object-cover rounded-lg border border-mat-charcoal/10 shrink-0"
                         referrerPolicy="no-referrer"
                       />
-                      <div>
-                        <h4 className="font-retro text-lg text-retro-dark font-bold leading-tight line-clamp-1">{art.title}</h4>
-                        <p className="text-[10px] text-retro-dark/60 font-mono mt-0.5">{art.price} — {art.year}</p>
+                      <div className="overflow-hidden">
+                        <h4 className="font-serif text-sm font-bold text-mat-charcoal leading-tight truncate">{art.title}</h4>
+                        <p className="text-[10px] text-mat-charcoal/50 font-mono mt-0.5 truncate">{art.price} — Năm {art.year}</p>
                       </div>
                     </div>
 
                     <button
                       onClick={() => handleDeleteArt(art.id, art.title)}
-                      className="text-retro-rose hover:bg-retro-rose/20 p-2 rounded-sm border border-transparent hover:border-retro-rose/30 cursor-pointer"
+                      className="text-mat-crimson hover:bg-mat-crimson/10 p-2.5 rounded-xl border border-transparent hover:border-mat-crimson/20 cursor-pointer shrink-0 transition-all"
                       title="Xóa tác phẩm"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -544,32 +548,32 @@ export default function AdminView() {
           </div>
 
           {/* Services List */}
-          <div className="pixel-border bg-retro-paper p-5 space-y-4">
-            <h3 className="font-retro text-2xl text-retro-wood uppercase border-b-2 border-retro-dark pb-2">
-              Danh Sách Hoạt Động ({services.length})
+          <div className="bg-white mat-card p-6 space-y-4">
+            <h3 className="font-serif text-xl font-bold text-mat-charcoal border-b border-mat-charcoal/10 pb-2 flex items-center justify-between">
+              <span>Danh Sách Hoạt Động Trải Nghiệm ({services.length})</span>
             </h3>
 
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-retro-wood" />
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 animate-spin text-mat-crimson" />
               </div>
             ) : services.length === 0 ? (
-              <p className="text-xs font-pixel text-retro-wood/50 py-4 text-center">Chưa có hoạt động nào.</p>
+              <p className="text-xs font-mono text-mat-charcoal/50 py-8 text-center">Chưa có trải nghiệm nào.</p>
             ) : (
-              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+              <div className="space-y-3 max-h-[440px] overflow-y-auto pr-2">
                 {services.map((svc) => (
                   <div
                     key={svc.id}
-                    className="flex gap-3 items-center justify-between bg-retro-beige/40 p-2 border border-retro-dark/10 hover:bg-retro-beige/70 transition-colors rounded-xs"
+                    className="flex gap-3 items-center justify-between bg-[#F4EFE6]/40 p-3 border border-mat-charcoal/10 hover:bg-[#F4EFE6]/90 transition-all rounded-2xl"
                   >
-                    <div>
-                      <h4 className="font-retro text-lg text-retro-dark font-bold leading-tight">{svc.title}</h4>
-                      <p className="text-[10px] text-retro-dark/60 font-mono mt-0.5">{svc.price} — {svc.duration}</p>
+                    <div className="overflow-hidden">
+                      <h4 className="font-serif text-sm font-bold text-mat-charcoal leading-tight truncate">{svc.title}</h4>
+                      <p className="text-[10px] text-mat-charcoal/50 font-mono mt-0.5 truncate">{svc.price} — {svc.duration}</p>
                     </div>
 
                     <button
                       onClick={() => handleDeleteService(svc.id, svc.title)}
-                      className="text-retro-rose hover:bg-retro-rose/20 p-2 rounded-sm border border-transparent hover:border-retro-rose/30 cursor-pointer"
+                      className="text-mat-crimson hover:bg-mat-crimson/10 p-2.5 rounded-xl border border-transparent hover:border-mat-crimson/20 cursor-pointer shrink-0 transition-all"
                       title="Xóa hoạt động"
                     >
                       <Trash2 className="w-4 h-4" />

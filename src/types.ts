@@ -22,4 +22,4 @@ export interface ServiceItem {
   createdAt: string;
 }
 
-export type ActiveTab = "home" | "gallery" | "history" | "services" | "admin";
+export type ActiveTab = "home" | "gallery" | "history" | "services" | "admin" | "tide";

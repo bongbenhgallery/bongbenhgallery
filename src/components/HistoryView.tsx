@@ -179,21 +179,21 @@ export default function HistoryView() {
                     onClick={() => setSelectedTopic(topic)}
                     className={`w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 cursor-pointer ${
                       isActive
-                        ? "bg-retro-beige border-mat-crimson/35 shadow-sm"
-                        : "bg-transparent border-transparent hover:bg-retro-beige/35"
+                        ? "bg-[#8B1E0F]/10 border-[#8B1E0F]/35 shadow-sm"
+                        : "bg-transparent border-transparent hover:bg-[#8B1E0F]/5"
                     }`}
                   >
-                    <div className={`p-2 rounded-lg mt-0.5 ${isActive ? "bg-mat-crimson text-white" : "bg-retro-beige text-mat-charcoal/60"}`}>
+                    <div className={`p-2 rounded-lg mt-0.5 ${isActive ? "bg-[#8B1E0F] text-white" : "bg-black/5 text-[#2C2C2C]/60"}`}>
                       {topic.id === "kieu" && <Book className="w-4 h-4" />}
                       {topic.id === "kenh-te" && <Waves className="w-4 h-4" />}
                       {topic.id === "dan-nguyet" && <Music className="w-4 h-4" />}
                     </div>
                     
                     <div className="space-y-1">
-                      <span className="text-[10px] font-mono tracking-wider block text-mat-crimson font-semibold">
+                      <span className="text-[10px] font-mono tracking-wider block text-[#8B1E0F] font-semibold">
                         {topic.category}
                       </span>
-                      <h4 className="font-display font-medium text-sm text-mat-charcoal leading-snug">
+                      <h4 className="font-display font-medium text-sm text-[#2C2C2C] leading-snug">
                         {topic.title}
                       </h4>
                     </div>
@@ -204,19 +204,19 @@ export default function HistoryView() {
           </div>
 
           {/* Interactive Moon Lute Soundboard Widget */}
-          <div className="mat-card bg-mat-charcoal text-retro-paper p-5 space-y-4 relative overflow-hidden">
+          <div className="mat-card bg-[#2C2C2C] text-[#F4EFE6] p-5 space-y-4 relative overflow-hidden">
             <div className="absolute right-2 top-2 opacity-15 pointer-events-none">
-              <Music className="w-20 h-20 text-retro-amber animate-pulse" />
+              <Music className="w-20 h-20 text-[#EAA812] animate-pulse" />
             </div>
 
             <div className="space-y-1">
-              <div className="inline-block bg-retro-rose/20 text-retro-rose text-[9px] font-pixel px-2 py-0.5 rounded-sm">
+              <div className="inline-block bg-[#8B1E0F]/30 text-[#EAA812] text-[9px] font-mono tracking-wider uppercase px-2 py-0.5 rounded-md">
                 TRẢI NGHIỆM ÂM CỔ
               </div>
-              <h3 className="font-serif text-xl text-retro-amber font-semibold">
+              <h3 className="font-serif text-xl text-[#EAA812] font-semibold">
                 Độ Âm Quân Tử Cầm
               </h3>
-              <p className="text-xs text-retro-paper/75">
+              <p className="text-xs text-[#F4EFE6]/75">
                 Chạm thử các cung phím đàn nguyệt retro để tái tạo tiếng tơ ngân vang bồng bềnh:
               </p>
             </div>
@@ -230,20 +230,20 @@ export default function HistoryView() {
                     onClick={() => playRetroNote(note.freq, note.name)}
                     className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
                       isPlaying
-                        ? "bg-retro-amber border-retro-amber text-retro-dark translate-y-0.5"
-                        : "bg-retro-dark border-retro-paper/20 hover:border-retro-amber hover:bg-retro-beige/10"
+                        ? "bg-[#EAA812] border-[#EAA812] text-black translate-y-0.5"
+                        : "bg-black/20 border-white/10 hover:border-[#EAA812] hover:bg-white/5"
                     }`}
                   >
                     <span className="block font-semibold text-xs font-display">{note.name}</span>
-                    <span className="text-[9px] text-retro-paper/50 block font-mono">{note.tag}</span>
+                    <span className="text-[9px] text-white/50 block font-mono">{note.tag}</span>
                   </button>
                 );
               })}
             </div>
 
             {playingNote && (
-              <div className="text-center bg-retro-amber/15 py-1 rounded-md">
-                <span className="font-mono text-xs text-retro-amber animate-pulse">
+              <div className="text-center bg-[#EAA812]/15 py-1.5 rounded-xl">
+                <span className="font-mono text-xs text-[#EAA812] animate-pulse">
                   🔊 Đang ngân: {playingNote}...
                 </span>
               </div>
@@ -271,11 +271,11 @@ export default function HistoryView() {
                   onClick={() => handleLike(selectedTopic.id)}
                   className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border transition-all cursor-pointer ${
                     liked[selectedTopic.id]
-                      ? "bg-retro-rose/15 border-retro-rose text-retro-rose"
-                      : "bg-transparent border-mat-charcoal/15 text-mat-charcoal/70 hover:bg-retro-beige/30"
+                      ? "bg-[#8B1E0F]/15 border-[#8B1E0F] text-[#8B1E0F]"
+                      : "bg-transparent border-mat-charcoal/15 text-[#2C2C2C]/70 hover:bg-[#8B1E0F]/5"
                   }`}
                 >
-                  <Star className={`w-4 h-4 ${liked[selectedTopic.id] ? "fill-retro-rose" : ""}`} />
+                  <Star className={`w-4 h-4 ${liked[selectedTopic.id] ? "fill-[#8B1E0F]" : ""}`} />
                   Yêu thích ({likes[selectedTopic.id]})
                 </button>
               </div>
@@ -306,7 +306,7 @@ export default function HistoryView() {
 
             {/* Quote block */}
             {selectedTopic.quote && (
-              <div className="bg-retro-beige/50 p-4 rounded-xl border-l-4 border-mat-crimson relative">
+              <div className="bg-[#F4EFE6] p-5 rounded-xl border-l-4 border-[#8B1E0F] relative">
                 <p className="italic font-serif text-mat-charcoal text-sm leading-relaxed">
                   "{selectedTopic.quote.text}"
                 </p>

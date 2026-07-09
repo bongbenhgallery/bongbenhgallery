@@ -6,6 +6,7 @@ import GalleryView from "./components/GalleryView";
 import HistoryView from "./components/HistoryView";
 import ServicesView from "./components/ServicesView";
 import AdminView from "./components/AdminView";
+import TideCalendarWidget from "./components/TideCalendarWidget";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("home");
@@ -20,6 +21,8 @@ export default function App() {
         return <HistoryView />;
       case "services":
         return <ServicesView />;
+      case "tide":
+        return <TideCalendarWidget />;
       case "admin":
         return <AdminView />;
       default:

@@ -18,12 +18,17 @@
   --color-retro-rose: #d25f5f;
   --color-retro-sky: #a5d5d5;
   
-  /* Material-Retro Hybrid Palette */
-  --color-mat-crimson: #8C2D19; /* Lacquer red */
-  --color-mat-ochre: #C99026;   /* Imperial gold */
-  --color-mat-jade: #225C43;    /* Indochina jade */
-  --color-mat-charcoal: #1E1A17;
-  --color-mat-cream: #FDFBF7;
+  /* Material-Retro Hybrid Palette - Retro-Modern Vietnam */
+  --color-mat-crimson: #8B1E0F; /* Deep Lacquer / Madder Red */
+  --color-mat-ochre: #EAA812;   /* Imperial Yellow / Mustard Accent */
+  --color-mat-jade: #225C43;    /* Indochina Jade */
+  --color-mat-charcoal: #2C2C2C; /* Deep Charcoal for soft modern contrast */
+  --color-mat-cream: #F4EFE6;   /* Warm Rice Paper / Eggshell Heritage */
+  
+  --color-viet-red: #8B1E0F;
+  --color-viet-yellow: #EAA812;
+  --color-viet-paper: #F4EFE6;
+  --color-viet-charcoal: #2C2C2C;
 }
 
 @layer utilities {
