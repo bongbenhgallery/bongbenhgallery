@@ -1,0 +1,6 @@
+{
+  "name": "Bồng Bềnh Gallery",
+  "description": "Bồng Bềnh Gallery is a cozy retro-themed art gallery located on a coffee ship in Kênh Tẻ, Saigon, featuring beautiful local paintings and digital arts, and celebrating Vietnamese classic literature like the Tale of Kiều.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

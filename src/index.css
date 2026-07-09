@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=VT323&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-retro: "VT323", monospace;
+  --font-pixel: "Press Start 2P", monospace;
+  
+  --color-retro-beige: #f4eae1;
+  --color-retro-paper: #faf6f0;
+  --color-retro-dark: #181412;
+  --color-retro-wood: #4a2f1b;
+  --color-retro-amber: #ffb000;
+  --color-retro-green: #33ff33;
+  --color-retro-teal: #1d4f4f;
+  --color-retro-rose: #d25f5f;
+  --color-retro-sky: #a5d5d5;
+  
+  /* Material-Retro Hybrid Palette */
+  --color-mat-crimson: #8C2D19; /* Lacquer red */
+  --color-mat-ochre: #C99026;   /* Imperial gold */
+  --color-mat-jade: #225C43;    /* Indochina jade */
+  --color-mat-charcoal: #1E1A17;
+  --color-mat-cream: #FDFBF7;
+}
+
+@layer utilities {
+  /* CRT Scanline Effect */
+  .crt-screen {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .crt-screen::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 20;
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+  }
+
+  .crt-screen::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
+    z-index: 21;
+    pointer-events: none;
+  }
+
+  /* Pixel borders */
+  .pixel-border {
+    border-style: solid;
+    border-width: 4px;
+    border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><path d='M2 2h2v2H2zm2 2h2v2H4zm2 2h2v2H6zm2 2h2v2H8zm2 2h2v2h-2z' fill='%23181412'/></svg>") 4 repeat;
+  }
+  
+  .pixel-border-retro {
+    border-style: solid;
+    border-width: 4px;
+    border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12'><path d='M0 0h4v4H0zm4 4h4v4H4zm4 4h4v4H8z' fill='%23181412'/></svg>") 4 repeat;
+  }
+  
+  .pixel-border-double {
+    border: 4px double #181412;
+  }
+
+  /* Retro text shadows */
+  .retro-shadow {
+    text-shadow: 2px 2px 0px #181412;
+  }
+  
+  .retro-shadow-amber {
+    text-shadow: 2px 2px 0px #4a2f1b;
+  }
+
+  /* Material Design Elevation with Oldschool Borders */
+  .mat-card {
+    background-color: #FAF6F0;
+    border: 1px solid rgba(74, 47, 27, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mat-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+  }
+
+  /* Vintage Postage Stamp Edge */
+  .stamp-edge {
+    background-image: radial-gradient(circle at 0 50%, transparent 8px, #faf6f0 8px),
+                      radial-gradient(circle at 100% 50%, transparent 8px, #faf6f0 8px);
+    background-size: 100% 100%, 100% 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+  }
+
+  /* Retro pixel-art buttons */
+  .pixel-btn {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f4eae1;
+    border: 4px solid #181412;
+    box-shadow: 4px 4px 0px #181412;
+    transition: all 0.1s ease;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    color: #181412;
+    user-select: none;
+  }
+
+  .pixel-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #181412;
+  }
+
+  .pixel-btn-amber {
+    background-color: #ffb000;
+    color: #181412;
+  }
+
+  .pixel-btn-green {
+    background-color: #33ff33;
+    color: #181412;
+  }
+  
+  .pixel-btn-teal {
+    background-color: #1d4f4f;
+    color: #faf6f0;
+    border-color: #faf6f0;
+    box-shadow: 4px 4px 0px #faf6f0;
+  }
+  
+  .pixel-btn-teal:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #faf6f0;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f4eae1;
+    border-left: 4px solid #181412;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #4a2f1b;
+    border: 4px solid #181412;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ffb000;
+  }
+}
+
+/* Base custom styles */
+body {
+  background-color: #181412;
+  color: #181412;
+  font-family: "Inter", sans-serif;
+  image-rendering: pixelated;
+}
